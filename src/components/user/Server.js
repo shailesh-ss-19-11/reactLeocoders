@@ -12,3 +12,12 @@ export const getUserList = (success) => {
         console.log(err)
     })
 }
+
+
+export const AddUser =(data,success)=>{
+    axios.post(BASEURL,data).then((resp)=>{
+        if(resp.status==201){
+            success(resp)
+        }
+    });
+}

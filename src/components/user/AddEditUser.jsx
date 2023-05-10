@@ -1,5 +1,7 @@
+import axios from 'axios'
 import React, { useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
+import { AddUser } from './Server'
 
 export default function AddEditUser(props) {
     const [firstName, setfirstName] = useState("")
@@ -7,6 +9,8 @@ export default function AddEditUser(props) {
     const [age, setage] = useState(0)
     const [address, setaddress] = useState("")
 
+    const URL = "https://retoolapi.dev/ozK3gN/data/"
+    console.log(URL);
     const save = (e) => {
         e.preventDefault();
         let obj = {};
@@ -16,6 +20,12 @@ export default function AddEditUser(props) {
         obj.Address = address;
 
         console.log(obj);
+        AddUser(obj,(response)=>{
+            if(response.status==201){
+                props.handleClose();
+                props.getUserData();
+            }
+        })
     }
     return (
         <div>

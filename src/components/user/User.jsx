@@ -49,7 +49,7 @@ const User = () => {
                     }
                 </tbody>
             </table>
-            {showModal?<AddEditUser show={showModal} handleClose={handleClose}/>:""}
+            {showModal?<AddEditUser getUserData={getUserData} show={showModal} handleClose={handleClose}/>:""}
         </div>
     )
 }

@@ -32,8 +32,14 @@ export default function Header(props) {
         <li class="nav-item">
           <Link class="nav-link" to="/users">Users</Link>
         </li>
+        <li class="nav-item">
+          <Link class="nav-link" to="/signin">SignIn</Link>
+        </li>
+        <li class="nav-item">
+          <Link class="nav-link" to="/signup">SignUp</Link>
+        </li>
       </ul>
-      <button className='btn btn-primary w-25' onClick={props.clickme}>click me</button>
+      {/* <button className='btn btn-primary w-25' onClick={props.clickme}>click me</button> */}
     </nav>
   )
 }
