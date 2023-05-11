@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { getUserList } from "./Server";
+import { deleteuser, getUserList } from "./Server";
 import { AiTwotoneEdit, AiFillDelete } from 'react-icons/ai'
 import AddEditUser from "./AddEditUser";
 const User = () => {
     const [userData, setuserData] = useState([]);
-    const [showModal,setshowModal] = useState(false);
+    const [showModal, setshowModal] = useState(false);
+    const [user, setuser] = useState({});
     const getUserData = () => {
         getUserList((data) => {
             console.log(data);
@@ -16,13 +17,29 @@ const User = () => {
         getUserData();
     }, [])
 
-    const handleClose=()=>{
+    const handleClose = () => {
         setshowModal(false);
+        setuser({});
     }
+
+    const deleteUser = (id) => {
+        deleteuser(id, (resp) => {
+            console.log(resp, "response");
+            if (resp.status == 200) {
+                getUserData();
+            }
+        })
+    }
+
+    const editUser = (user) => {
+        setshowModal(true);
+        setuser(user)
+    }
+
 
     return (
         <div className="container mt-3">
-            <button className="btn btn-primary" onClick={()=>setshowModal(true)}>Add</button>
+            <button className="btn btn-primary" onClick={() => setshowModal(true)}>Add</button>
             <table class="table">
                 <thead>
                     <tr>
@@ -42,14 +59,14 @@ const User = () => {
                                 <td>{user["Last Name"]}</td>
                                 <td>{user.Age}</td>
                                 <td>{user.Address}</td>
-                                <td><button className="btn btn-secondary"><AiTwotoneEdit /></button></td>
-                                <td><button className="btn btn-danger"><AiFillDelete /></button></td>
+                                <td><button className="btn btn-secondary" onClick={() => { editUser(user) }}><AiTwotoneEdit /></button></td>
+                                <td><button className="btn btn-danger" onClick={() => deleteUser(user.id)}><AiFillDelete /></button></td>
                             </tr>
                         ))
                     }
                 </tbody>
             </table>
-            {showModal?<AddEditUser getUserData={getUserData} show={showModal} handleClose={handleClose}/>:""}
+            {showModal ? <AddEditUser user={user} getUserData={getUserData} show={showModal} handleClose={handleClose} /> : ""}
         </div>
     )
 }
