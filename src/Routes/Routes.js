@@ -5,6 +5,7 @@ import Contact from '../components/BasicComponents/Contact';
 import Service from '../components/BasicComponents/Service';
 import User from '../components/user/User';
 import SignUp from '../components/Auth/SignUp/SignUp';
+import SignIn from '../components/Auth/SignIn/SignIn';
 
 const Routing=()=>{
   return(
@@ -15,6 +16,7 @@ const Routing=()=>{
       <Route path='/service' Component={Service}/>
       <Route path='/users' Component={User}/>
       <Route path='/signup' Component={SignUp}/>
+      <Route path='/signin' Component={SignIn}/>
     </Routes>
   )
 }
