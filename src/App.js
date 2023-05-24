@@ -6,6 +6,7 @@ import Footer from './components/CommonComponents/footer/Footer';
 import UserDetails from './components/user/UserDetails';
 import Home from './components/BasicComponents/Home';
 import Routing from './Routes/Routes';
+import SignUp from './components/Auth/SignUp/SignUp';
 export default function App() {
   const [names, setNames] = useState(["shailesh", "durga", "asmita", "mayuri"])
   const [user, setuser] = useState({});
@@ -29,7 +30,7 @@ export default function App() {
     <div>
       <Header user={user} clickme={clickme}/>
       <Routing />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 }

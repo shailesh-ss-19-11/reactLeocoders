@@ -37,3 +37,22 @@ export const deleteuser = (id, success) => {
         }
     });
 }
+
+export const getuserDetails=(id,success)=>{
+    axios.get(`${BASEURL}/${id}`).then((resp)=>{
+        console.log(resp);
+        if(resp.status==200){
+            success(resp.data);
+        }
+    })
+}
+
+export const getPaginateData=(pagenumber,limit,success)=>{
+    axios.get(`${BASEURL}?_page=${pagenumber}&_limit=${limit}`).then((resp)=>{
+        console.log(resp);
+        if(resp.status==200){
+            success(resp.data);
+        }
+    })
+}
+

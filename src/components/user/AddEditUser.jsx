@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { AddUser, EditUser } from './Server'
 import { useEffect } from 'react'
@@ -10,7 +10,11 @@ export default function AddEditUser(props) {
     const [lastname, setlastname] = useState(props.user ? props.user["Last Name"] : "")
     const [age, setage] = useState(props.user ? props.user.Age : "")
     const [address, setaddress] = useState(props.user ? props.user.Address : "")
+    const inputref = useRef(null);
 
+    useEffect(() => {
+        inputref.current.focus();
+    }, [])
     const URL = "https://retoolapi.dev/ozK3gN/data/"
     console.log(URL);
     const save = (e) => {
@@ -30,7 +34,7 @@ export default function AddEditUser(props) {
                 }
             })
         } else {
-            AddUser(obj, (response) => {
+            AddUser(obj, (response) =>  {
                 if (response.status == 201) {
                     props.handleClose();
                     props.getUserData();
@@ -50,7 +54,7 @@ export default function AddEditUser(props) {
                     <form onSubmit={save}>
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" defaultValue={firstName} onChange={(e) => { setfirstName(e.target.value) }} />
+                            <input ref={inputref} type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" defaultValue={firstName} onChange={(e) => { setfirstName(e.target.value) }} />
                         </div>
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Last Name</label>
