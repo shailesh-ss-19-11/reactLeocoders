@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
+
 import { deleteuser, getPaginateData, getUserList } from "./Server";
 import { AiTwotoneEdit, AiFillDelete } from 'react-icons/ai'
 import AddEditUser from "./AddEditUser";
@@ -9,7 +11,12 @@ import { Link } from "react-router-dom";
 import Pagination from '@mui/material/Pagination';
 import axios from "axios";
 import { Checkbox } from "@mui/material";
-const User = () => {
+// import { useHistory } from 'react-router-dom';
+
+
+
+function User() {
+    // let history = useHistory ();
     const [userData, setuserData] = useState([]);
     const [showModal, setshowModal] = useState(false);
     const [user, setuser] = useState({});
@@ -18,7 +25,27 @@ const User = () => {
     const [pagelimit, setpagelimit] = useState(5);
     const [page, setpage] = useState(1);
     const [test, settest] = useState("false");
+    const [rows, setrows] = useState([]);
     const myref = useRef(null);
+
+    const [ischecked, setischecked] = useState([])
+    const [statecustomer, setststecustome] = useState([])
+
+    let idsArr = []
+    const handlecheckbox = (e) => {
+        let findedEle = userData.find((user) => user.id == e.target.value);
+        findedEle.ischecked = e.target.checked;
+        let newarr = [...userData];
+        newarr[newarr.indexOf(findedEle)] = findedEle;
+        setuserData(newarr);
+        newarr.forEach((ele) => {
+            if (ele.ischecked == true) {
+                idsArr.push(ele.id);
+            }
+            console.log(idsArr);
+        })
+    }
+
     const getUserData = () => {
         setloading(true);
         getUserList((data) => {
@@ -64,19 +91,56 @@ const User = () => {
     }
     const handlePageChange = (e, pagenumber) => {
         setpage(pagenumber);
-        getPaginateData(pagenumber,pagelimit,(response)=>{
+        getPaginateData(pagenumber, pagelimit, (response) => {
             setuserData(response);
         })
     }
 
-    const handleCountChange=(e)=>{
+    const handleCountChange = (e) => {
         setpagelimit(e.target.value)
-        getPaginateData(page,e.target.value,(response)=>{
+        getPaginateData(page, e.target.value, (response) => {
             setuserData(response);
         })
 
     }
+    const handledelete = async () => {
+        const response = await axios.post("https://retoolapi.dev/ozK3gN/data/", JSON.stringify(ischecked))
+        console.log(response)
 
+        // history.push ('./AddEditUser');
+
+    }
+
+
+
+    const deletecheck = () => {
+        let arrayids = [];
+        statecustomer.forEach(d => {
+            if (d.select) {
+                arrayids.push(d.id);
+            }
+        });
+        //  console.log(d.id)
+    }
+
+    let ids = [];
+    const handleselectAll = (e) => {
+        console.log(e.target.checked);
+        let newarr = [...userData];
+        console.log(newarr);
+        newarr.forEach((element) => {
+            element.ischecked = e.target.checked;
+            console.log(element);
+        })
+        console.log(newarr);
+        setuserData(newarr);
+        newarr.forEach((ele) => {
+            if (ele.ischecked == true) {
+                ids.push(ele.id);
+            }
+            console.log(ids);
+        })
+    }
 
     return (
         <div className="container mt-3">
@@ -87,9 +151,14 @@ const User = () => {
                 </div> :
                 <div>
                     <button className="btn btn-primary" onClick={() => setshowModal(true)}>Add</button>
+                    &nbsp;&nbsp;
+
+                    <button className="btn btn-danger" onClick={deletecheck} >delete</button>
                     <table class="table">
                         <thead>
                             <tr>
+                                <th scope="col"><input type="checkbox" value={user.id} checked={user.ischecked} onChange={handleselectAll} /></th>
+                                {/* <th scope="col"><input type="checkbox" /></th> */}
                                 <th scope="col">#</th>
                                 <th scope="col">First Name</th>
                                 <th scope="col">Last Name</th>
@@ -100,8 +169,10 @@ const User = () => {
                         <tbody>
                             {
                                 userData.map((user, index) => (
-                                    <tr key={index}>
-                                        <th scope="row">{Checkbox}</th>
+                                    <tr key={user.index}>
+
+                                        <td> <input type="checkbox" value={user.id} checked={user.ischecked} onChange={(e) => handlecheckbox(e)} />  </td>
+                                        <td scope="row"> {index + 1}  </td>
                                         <td><Link to={"users/" + user.id}> {user["First Name"]}</Link></td>
                                         <td>{user["Last Name"]}</td>
                                         <td>{user.Age}</td>
@@ -118,8 +189,8 @@ const User = () => {
                     {/* <button onClick={()=>settest("true")}>btn test</button> */}
                 </div>
             }
-            <div className="d-flex " style={{justifyContent:"space-between"}}>
-                <Pagination defaultPage={page} count={totalCount/5} onChange={handlePageChange} />
+            <div className="d-flex " style={{ justifyContent: "space-between" }}>
+                <Pagination defaultPage={page} count={totalCount / 5} onChange={handlePageChange} />
                 <div>
                     <select name="" id="" onChange={handleCountChange}>
                         <option value="5">5</option>
